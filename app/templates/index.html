@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Privacy Lab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>🧠 Event Privacy Lab</h2>
+      <ul>
+        <li class="tab active" data-target="event-tab">🌀 Event Shuffle</li>
+        <li class="tab" data-target="frame-tab">🧩 Frame Shuffle</li>
+        <li class="tab" data-target="blur-tab">🌫️ Frame Blur</li>
+        <li class="tab" data-target="visual-tab">📊 Visualization</li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+
+      <section id="event-tab" class="tab-content active">
+        <h3>🌀 Event Shuffle 
+            <span class="tooltip">ℹ
+              <span class="tooltiptext">
+                <span class="close-btn">×</span>
+                Event Shuffle randomly reorders events within each time interval (chunk) to preserve privacy while keeping general temporal structure. <br>
+                <b>Interval:</b> Time window (ms) to define the size of each chunk.
+              </span>
+            </span>
+        </h3>
+        <form action="/process/event_shuffle" method="post" enctype="multipart/form-data">
+          <label>Select event file:</label>
+          <input type="file" name="file" required />
+
+          <label>Interval (ms):
+            <span class="tooltip">ℹ
+              <span class="tooltiptext">
+                <span class="close-btn">×</span>
+                Time window (in milliseconds) to group events into a chunk for shuffling. Smaller intervals = finer-grained shuffling, larger intervals = coarser.
+              </span>
+            </span>
+          </label>
+          <input type="number" name="interval" value="50" step="10" min="10" max="500">
+
+          <button type="submit">Run Event Shuffle</button>
+        </form>
+      </section>
+
+      <section id="frame-tab" class="tab-content">
+        <h3>🧩 Frame Shuffle
+            <span class="tooltip">ℹ
+              <span class="tooltiptext">
+                <span class="close-btn">×</span>
+                Frame Shuffle randomizes the order of entire frames (chunks of events). Preserves local event structure within frames but breaks the global temporal sequence.
+              </span>
+            </span>
+        </h3>
+        <form action="/process/frame_shuffle" method="post" enctype="multipart/form-data">
+          <label>Select event file:</label>
+          <input type="file" name="file" required />
+          <button type="submit">Run Frame Shuffle</button>
+        </form>
+      </section>
+
+      <section id="blur-tab" class="tab-content">
+        <h3>🌫️ Frame Blur
+            <span class="tooltip">ℹ
+              <span class="tooltiptext">
+                <span class="close-btn">×</span>
+                Frame Blur applies spatial Gaussian smoothing to each frame of events. Reduces spatial detail while preserving general activity patterns. <br>
+                <b>σ (sigma):</b> Controls the strength of the blur. Larger σ = stronger blur.
+              </span>
+            </span>
+        </h3>
+        <form action="/process/frame_blur" method="post" enctype="multipart/form-data">
+          <label>Select event file:</label>
+          <input type="file" name="file" required />
+
+          <label>Blur strength (σ):
+            <span class="tooltip">ℹ
+              <span class="tooltiptext">
+                <span class="close-btn">×</span>
+                Standard deviation of Gaussian kernel for blurring. Typical values: 1–3. Larger = more smoothing.
+              </span>
+            </span>
+          </label>
+          <input type="number" name="sigma" value="1.5" step="0.1" min="0.5" max="5">
+
+          <button type="submit">Run Frame Blur</button>
+        </form>
+      </section>
+
+      <section id="visual-tab" class="tab-content">
+        <h3>📊 Visualization</h3>
+
+        <form id="visual-form" method="POST" enctype="multipart/form-data">
+          <label>Select event file:</label>
+          <input type="file" name="file" required>
+
+          <label>Interval (ms):</label>
+          <input type="number" name="interval" value="50" step="10" min="10" max="500">
+
+          <button type="submit">Generate Visualization</button>
+        </form>
+
+        <div id="visual-output" style="margin-top: 20px;">
+
+        <a id="download-btn" href="#" download>Download GIF</a>
+          <!-- GIF will be embedded here -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
