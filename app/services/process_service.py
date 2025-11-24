@@ -15,13 +15,20 @@ def process_uploaded_file(file, algorithm, form):
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
 
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))   
+    APP_DIR = os.path.dirname(BASE_DIR)                  
+    PROCESSED_DIR = os.path.join(APP_DIR, "processed")
+
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+
     if algorithm == "event_shuffle":
         interval = float(form.get("interval", 50))
         raw_out = event_shuffle(filepath, interval=interval)
 
-        outpath = os.path.join("app", raw_out) if not raw_out.startswith("app") else raw_out
-        return outpath
+        filename = os.path.basename(raw_out)
 
+        outpath = os.path.join(PROCESSED_DIR, filename)
+        return outpath
 
     if algorithm == "frame_shuffle":
         return frame_shuffle(filepath)
@@ -31,3 +38,4 @@ def process_uploaded_file(file, algorithm, form):
         return frame_blur(filepath, sigma=sigma)
 
     raise ValueError("Invalid algorithm")
+
