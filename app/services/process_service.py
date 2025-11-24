@@ -5,10 +5,7 @@ from algorithms.frame_shuffle import frame_shuffle
 from algorithms.frame_blur import frame_blur
 
 UPLOAD_FOLDER = "uploads"
-PROCESSED_FOLDER = "processed"
-
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
 
 def process_uploaded_file(file, algorithm, form):
@@ -18,13 +15,7 @@ def process_uploaded_file(file, algorithm, form):
 
     if algorithm == "event_shuffle":
         interval = float(form.get("interval", 50))
-
-        raw_out = event_shuffle(filepath, interval=interval)
-
-        filename = os.path.basename(raw_out)
-
-        outpath = os.path.join("app", PROCESSED_FOLDER, filename)
-
+        outpath = event_shuffle(filepath, interval=interval)
         return outpath
 
     if algorithm == "frame_shuffle":
