@@ -26,9 +26,13 @@ def process_uploaded_file(file, algorithm, form):
         raw_out = event_shuffle(filepath, interval=interval)
 
         filename = os.path.basename(raw_out)
+        outpath = os.path.join(PROCESSED_FOLDER, filename)
 
-        outpath = os.path.join(PROCESSED_DIR, filename)
+        data = np.loadtxt(raw_out)
+        np.savetxt(outpath, data, delimiter=',')
+
         return outpath
+
 
     if algorithm == "frame_shuffle":
         return frame_shuffle(filepath)
