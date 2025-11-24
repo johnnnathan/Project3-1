@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from algorithms.event_shuffle import event_shuffle
 from algorithms.frame_shuffle import frame_shuffle
 from algorithms.frame_blur import frame_blur
