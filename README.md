@@ -27,8 +27,30 @@ run_inference.py # events → pose → action
 ```
 > **Not stored in GitHub (too large):**
 > - `EH36M/cache_eh36m/*.pt` – cached event + skeleton samples
-> - `MotionBERT/checkpoints/best_epoch.bin` – MotionBERT NTU60 checkpoint
-You must provide these locally.
+> - `MotionBERT/checkpoints/best_epoch.bin` – MotionBERT NTU60 checkpoint (https://huggingface.co/walterzhu/MotionBERT/resolve/main/checkpoint/action/FT_MB_release_MB_ft_NTU60_xsub/best_epoch.bin)
+You must provide these locally. 
+---
+## 0. Setup & Environment
+We do not track the virtual environment (.venv) in git.
+Instead, everyone recreates the environment from requirements.txt.
+
+From the repo root:
+```text
+# 1) create and activate a virtual environment
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# (on Linux/macOS: source .venv/bin/activate)
+
+# 2) install dependencies
+pip install -r requirements.txt
+```
+
+Then place the data/checkpoints:
+-EH36M cached samples → EH36M/cache_eh36m/
+-MotionBERT checkpoint → MotionBERT/checkpoints/best_epoch.bin
+
+After that, the scripts will run the same way on any machine.
 ---
 ## 1. Pose Estimation on EH36M
 `EH36M/train_pose_model.py` trains `EventPoseTransformer`:
