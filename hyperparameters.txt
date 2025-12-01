@@ -1,0 +1,46 @@
+Training Parameters and Justifications
+
+batch_size: 8
+Balances GPU memory usage and training stability. Small batches are better suited for variable-length event data and fit well on the RTX 4060 GPU.
+
+epochs: 30
+Provides enough iterations for the model to converge without overfitting. Beyond 30 epochs, performance improvement was negligible.
+
+learning_rate: 1e-4
+Standard value for Adam optimizer. Allows stable convergence and avoids large gradient updates common in regression tasks.
+
+max_events: 800
+Limits the number of event points per frame to reduce memory usage while keeping meaningful temporal and spatial information.
+
+train/test split: 80% / 20%
+Standard practice to ensure a good balance between learning and generalization.
+
+optimizer: Adam
+Adaptive learning rate optimizer. Works well with noisy, sparse event-based input and improves training stability.
+
+loss function: MPJPE (Mean Per Joint Position Error)
+Measures average Euclidean error between predicted and ground-truth joints (in pixels or units). Standard metric in pose estimation.
+
+d_model: 32
+Latent dimension for Transformer embedding. Large enough to capture spatial-temporal structure but small enough to prevent overfitting.
+
+num_heads: 2
+Uses two attention heads to capture event-spatial interactions without excessive model complexity.
+
+num_layers: 2
+Uses a shallow Transformer encoder to maintain computational efficiency and prevent overfitting on small pose data.
+
+num_workers: 4
+Uses parallel data loading to improve throughput during training.
+
+pin_memory: True
+Accelerates data transfer from CPU to GPU, improving training speed.
+
+CUDA AMP (autocast + GradScaler): Enabled
+Enables mixed precision training, reducing memory usage and speeding up operations on RTX 4060.
+
+torch.backends.cudnn.benchmark: True
+Allows PyTorch to optimize low-level operations for faster training.
+
+allowed_actions: Directions, Discussion, Greeting, Phoning, Posing, Sitting, SittingDown, Waiting, Walking, WalkTogether
+These actions are movement types relevant to human-robot interaction, classroom behavior, and social/gestural motions in the EDMO scenario. Other actions like Smoking, Purchases, WalkingDog, TakingPhoto were excluded as irrelevant.
