@@ -1,0 +1,8 @@
+# Local EH36M cache and model checkpoints (too big for GitHub)
+EH36M/cache_eh36m/
+MotionBERT/checkpoints/
+
+# Virtual env & Python junk
+.venv/
+__pycache__/
+*.pyc
