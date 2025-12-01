@@ -4,127 +4,131 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Event Privacy Lab</title>
+    <title>Event Privacy Project</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <h2>🧠 Event Privacy Lab</h2>
-            <ul>
-                <li class="tab active" data-target="event-tab">🌀 Event Shuffle</li>
-                <li class="tab" data-target="frame-tab">🧩 Frame Shuffle</li>
-                <li class="tab" data-target="blur-tab">🌫️ Frame Blur</li>
-                <li class="tab" data-target="visual-tab">📊 Visualization</li>
-            </ul>
-        </nav>
+    <header>
+        <div class="container">
+            <h1>Event Privacy Project</h1>
+            <p class="subtitle">Upload event files to process them with various privacy-preserving transformations</p>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="content">
-
-            <section id="event-tab" class="tab-content active">
-                <h3>🌀 Event Shuffle
-                    <span class="tooltip">ℹ
-                        <span class="tooltiptext">
-                            <span class="close-btn">×</span>
-                            Event Shuffle randomly reorders events within each time interval (chunk) to preserve privacy
-                            while keeping general temporal structure. <br>
-                            <b>Interval:</b> Time window (ms) to define the size of each chunk.
-                        </span>
-                    </span>
-                </h3>
-                <form class="api-upload" action="/api/event_shuffle" method="post" enctype="multipart/form-data">
-                    <div class="status-box"></div> <label>Select event file:</label>
-                    <input type="file" name="file" required />
-
-                    <label>Interval (ms):
-                        <span class="tooltip">ℹ
-                            <span class="tooltiptext">
-                                <span class="close-btn">×</span>
-                                Time window (in milliseconds) to group events into a chunk for shuffling. Smaller
-                                intervals = finer-grained shuffling, larger intervals = coarser.
-                            </span>
-                        </span>
-                    </label>
-                    <input type="number" name="interval" value="50" step="10" min="10" max="500">
-
-                    <button type="submit">Run Event Shuffle</button>
-                </form>
-            </section>
-
-            <section id="frame-tab" class="tab-content">
-                <h3>🧩 Frame Shuffle
-                    <span class="tooltip">ℹ
-                        <span class="tooltiptext">
-                            <span class="close-btn">×</span>
-                            Frame Shuffle randomizes the order of entire frames (chunks of events). Preserves local
-                            event structure within frames but breaks the global temporal sequence.
-                        </span>
-                    </span>
-                </h3>
-                <form class="api-upload" action="/api/frame_shuffle" method="post" enctype="multipart/form-data">
-                    <div class="status-box"></div> <label>Select event file:</label>
-                    <input type="file" name="file" required />
-                    <button type="submit">Run Frame Shuffle</button>
-                </form>
-            </section>
-
-            <section id="blur-tab" class="tab-content">
-                <h3>🌫️ Frame Blur
-                    <span class="tooltip">ℹ
-                        <span class="tooltiptext">
-                            <span class="close-btn">×</span>
-                            Frame Blur applies spatial Gaussian smoothing to each frame of events. Reduces spatial
-                            detail while preserving general activity patterns. <br>
-                            <b>σ (sigma):</b> Controls the strength of the blur. Larger σ = stronger blur.
-                        </span>
-                    </span>
-                </h3>
-                <form class="api-upload" action="/api/frame_blur" method="post" enctype="multipart/form-data">
-                    <div class="status-box"></div>
-                    <label>Select event file:</label>
-                    <input type="file" name="file" required />
-
-                    <label>Blur strength (σ):
-                        <span class="tooltip">ℹ
-                            <span class="tooltiptext">
-                                <span class="close-btn">×</span>
-                                Standard deviation of Gaussian kernel for blurring. Typical values: 1–3. Larger = more
-                                smoothing.
-                            </span>
-                        </span>
-                    </label>
-                    <input type="number" name="sigma" value="1.5" step="0.1" min="0.5" max="5">
-
-                    <button type="submit">Run Frame Blur</button>
-                </form>
-            </section>
-
-            <section id="visual-tab" class="tab-content">
-                <h3>📊 Visualization</h3>
-
-                <form id="visual-form" method="POST" enctype="multipart/form-data">
-                    <label>Select event file:</label>
-                    <input type="file" name="file" required>
-
-                    <label>Interval (ms):</label>
-                    <input type="number" name="interval" value="50" step="10" min="10" max="500">
-
-                    <button type="submit">Generate Visualization</button>
-                </form>
-
-                <div id="visual-output" style="margin-top: 20px;">
-
-                    <a id="download-btn" href="#" download>Download GIF</a>
-                    <!-- GIF will be embedded here -->
+    <main>
+        <div class="container">
+            <div class="tabs">
+                <div class="tab-list">
+                    <button class="tab-button active" data-tab="event-tab">Event Shuffle</button>
+                    <button class="tab-button" data-tab="frame-tab">Frame Shuffle</button>
+                    <button class="tab-button" data-tab="blur-tab">Frame Blur</button>
+                    <button class="tab-button" data-tab="visual-tab">Visualization</button>
                 </div>
-            </section>
-        </main>
-    </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+                <!-- Event Shuffle -->
+                <div class="tab-content active" id="event-tab">
+                    <div class="card">
+                        <h3>Event Shuffle</h3>
+                        <p>Randomly reorders events within each interval to preserve privacy.</p>
+                        </h3>
+                        <form action="/api/event_shuffle" method="post" enctype="multipart/form-data">
+                            <label>Select event file:</label>
+                            <input type="file" name="file" required>
+
+                            <label>Interval (ms):</label>
+                            <input type="number" name="interval" value="50" step="10" min="10" max="500">
+
+                            <button type="submit">Run Event Shuffle</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Frame Shuffle -->
+                <div class="tab-content" id="frame-tab">
+                    <div class="card">
+                        <h3>Frame Shuffle</h3>
+                        <p>Randomizes the order of entire frames while preserving local structure.</p>
+                        <form action="/api/frame_shuffle" method="post" enctype="multipart/form-data">
+                            <label>Select event file:</label>
+                            <input type="file" name="file" required>
+                            <button type="submit">Run Frame Shuffle</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Frame Blur -->
+                <div class="tab-content" id="blur-tab">
+                    <div class="card">
+                        <h3>Frame Blur</h3>
+                        <p>Applies Gaussian blur to frames. Larger σ = stronger smoothing.</p>
+                        <form action="/api/frame_blur" method="post" enctype="multipart/form-data">
+                            <label>Select event file:</label>
+                            <input type="file" name="file" required>
+
+                            <label>Blur strength (σ):</label>
+                            <input type="number" name="sigma" value="1.5" step="0.1" min="0.5" max="5">
+
+                            <button type="submit">Run Frame Blur</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Visualization -->
+                <div class="tab-content" id="visual-tab">
+                    <div class="card">
+                        <h3>Visualization</h3>
+                        <form id="visual-form" method="POST" enctype="multipart/form-data">
+                            <label>Select event file:</label>
+                            <input type="file" name="file" required>
+
+                            <label>Interval (ms):</label>
+                            <input type="number" name="interval" value="50" step="10" min="10" max="500">
+
+                            <button type="submit">Generate Visualization</button>
+                        </form>
+
+                        <div id="visual-output">
+                            <a id="download-btn" href="#" download>Download GIF</a>
+                            <img id="visual-gif" src="" alt="">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Visualization AJAX form
+        const visualForm = document.getElementById('visual-form');
+        const visualGif = document.getElementById('visual-gif');
+        const downloadBtn = document.getElementById('download-btn');
+
+        visualForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(visualForm);
+            const response = await fetch('/api/visualize', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            visualGif.src = data.gif_url;
+            downloadBtn.href = data.gif_url;
+        });
+    </script>
 </body>
-
-</html>
