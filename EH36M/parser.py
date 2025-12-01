@@ -2,12 +2,19 @@ import os
 import torch
 import multiprocessing as mp
 import numpy as np
-from loader import load_sample
 import gc
+
+# Handle imports for both direct execution and module import
+try:
+    from EH36M.loader import load_sample
+except ImportError:
+    # Fallback for direct execution from EH36M directory
+    from loader import load_sample
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-CACHE_DIR = "cache_eh36m"
+# Cache directory should be inside EH36M folder
+CACHE_DIR = os.path.join(os.path.dirname(__file__), "cache_eh36m")
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 ALLOWED_ACTIONS = [

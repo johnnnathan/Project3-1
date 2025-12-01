@@ -3,9 +3,17 @@ import numpy as np
 import torch
 import os
 from EH36M.train_pose_model import EventPoseTransformer
-from motionbert_loader import load_motionbert_model
-from MotionBERT.labels.ntu60_labels import NTU60_LABELS
-from visualize_pose import animate_pose_sequence
+
+# Handle imports for both direct execution and module import
+try:
+    from MotionBERT.motionbert_loader import load_motionbert_model
+    from MotionBERT.labels.ntu60_labels import NTU60_LABELS
+    from MotionBERT.visualize_pose import animate_pose_sequence
+except ImportError:
+    # Fallback for direct execution from MotionBERT directory
+    from motionbert_loader import load_motionbert_model
+    from labels.ntu60_labels import NTU60_LABELS
+    from visualize_pose import animate_pose_sequence
 
 SEED = 0
 torch.manual_seed(SEED)
@@ -108,11 +116,16 @@ def build_events_tensor(sample):
 
 base_dir = os.path.dirname(__file__)
 cache_dir = os.path.join(base_dir, "../EH36M/cache_eh36m")
+
+# End-to-end sanity check: verify cache directory exists and has .pt files
+if not os.path.exists(cache_dir):
+    raise RuntimeError(f"Cache directory '{cache_dir}' does not exist.")
 all_files = os.listdir(cache_dir)
 sitting_files = [f for f in all_files if "SittingDown" in f and f.endswith(".pt")]
 
 if not sitting_files:
     raise RuntimeError("No SittingDown samples found in cache_eh36m")
+print(f"Found {len(sitting_files)} cached .pt file(s)")
 
 sitting_files.sort()
 
