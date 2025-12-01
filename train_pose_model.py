@@ -111,7 +111,7 @@ def train_model(model, train_loader, test_loader, epochs=20, lr=1e-4):
 
 
 if __name__ == "__main__":
-    root = r"C:\Users\alenm\OneDrive\Desktop\EH36M"
+    root = r"EH36M" #put your own eh36m dataset path
 
     print("\nLoading cached samples...")
 
@@ -172,3 +172,4 @@ if __name__ == "__main__":
         model, train_loader, test_loader,
         epochs=25, lr=1e-4
     )
+
