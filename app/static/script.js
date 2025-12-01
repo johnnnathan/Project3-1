@@ -1,15 +1,6 @@
 /* ------------------------------
    TAB SWITCHING
 --------------------------------*/
-document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-        tab.classList.add("active");
-        document.getElementById(tab.dataset.target).classList.add("active");
-    });
-});
 
 // Tab switching functionality
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -28,31 +19,6 @@ document.querySelectorAll(".tab").forEach(tab => {
             document.getElementById(tabId).classList.add('active');
         });
     });
-
-/* ------------------------------
-   TOOLTIP LOGIC
---------------------------------*/
-const tooltips = document.querySelectorAll('.tooltip');
-
-tooltips.forEach((tooltip) => {
-    const closeBtn = tooltip.querySelector('.close-btn');
-
-    tooltip.addEventListener('click', (e) => {
-        tooltips.forEach(t => t.classList.remove('active'));
-        tooltip.classList.add('active');
-        e.stopPropagation();
-    });
-
-    closeBtn.addEventListener('click', (e) => {
-        tooltip.classList.remove('active');
-        e.stopPropagation();
-    });
-});
-
-document.addEventListener('click', () => {
-    tooltips.forEach(t => t.classList.remove('active'));
-});
-
 
 /* ============================================================
    UNIVERSAL API HANDLER FOR ALL FORMS
@@ -99,18 +65,6 @@ async function handleFormUpload(form) {
         if (statusBox) statusBox.innerHTML = `<p style="color:red;">Unexpected error</p>`;
     }
 }
-
-/* ============================================================
-   ATTACH HANDLERS TO ALL STANDARD FORMS
-   (EXCEPT visualization, which is custom)
-============================================================ */
-document.querySelectorAll("form.api-upload").forEach(form => {
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        handleFormUpload(form);
-    });
-});
-
 
 /* ============================================================
    VISUALIZATION (Generates GIF internally)

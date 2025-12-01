@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Privacy Project</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script> 
 </head>
 
 <body>
@@ -98,37 +99,4 @@
             </div>
         </div>
     </main>
-
-    <script>
-        // Tab switching
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabId = button.getAttribute('data-tab');
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
-                button.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
-        // Visualization AJAX form
-        const visualForm = document.getElementById('visual-form');
-        const visualGif = document.getElementById('visual-gif');
-        const downloadBtn = document.getElementById('download-btn');
-
-        visualForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(visualForm);
-            const response = await fetch('/api/visualize', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            visualGif.src = data.gif_url;
-            downloadBtn.href = data.gif_url;
-        });
-    </script>
 </body>
