@@ -27,8 +27,8 @@ run_inference.py # events → pose → action
 ```
 > **Not stored in GitHub (too large):**
 > - `EH36M/cache_eh36m/*.pt` – cached event + skeleton samples
-> - `MotionBERT/checkpoints/best_epoch.bin` – MotionBERT NTU60 checkpoint
-You must provide these locally.
+> - `MotionBERT/checkpoints/best_epoch.bin` – MotionBERT NTU60 checkpoint (https://huggingface.co/walterzhu/MotionBERT/resolve/main/checkpoint/action/FT_MB_release_MB_ft_NTU60_xsub/best_epoch.bin)
+You must provide these locally. 
 ---
 ## 1. Pose Estimation on EH36M
 `EH36M/train_pose_model.py` trains `EventPoseTransformer`:
