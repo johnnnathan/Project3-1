@@ -100,17 +100,24 @@ label {
     align-items: center;
     gap: 1rem;
 }
-input[type="file"] {
+input {
     flex: 1;
+    width: 100%;
     padding: 0.75rem;
     border: 1px solid #d0d0d0;
     border-radius: 6px;
-    cursor: pointer;
     font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
-input[type="file"]:hover {
+
+input:focus {
     border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
+
+
 .upload-icon {
     width: 24px;
     height: 24px;
@@ -125,6 +132,28 @@ input[type="file"]:hover {
     font-weight: 500;
     color: #333;
 }
+
+.make-wide {
+    width: 100%;
+}
+
+button {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #d0d0d0;
+    background-color: #4077ef;
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+button:hover {
+    background-color: #7191e9;
+    border-color: #606ea4;
+}
+
 @media (max-width: 768px) {
     .tab-list {
         grid-template-columns: repeat(3, 1fr);
