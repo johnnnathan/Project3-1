@@ -3,3 +3,6 @@ v2e/*
 venv
 app/processed/*
 app/uploads/*
+processed/*
+.zip
+uploads/*

@@ -10,5 +10,5 @@ def frame_shuffle(filepath, interval=50):
     shuffled = shuffle_frames(events, chunk_size)
 
     outpath = os.path.join("processed", "frame_shuffled_" + os.path.basename(filepath))
-    np.savetxt(outpath, shuffled, delimiter=',')
+    np.savetxt(outpath, shuffled, fmt=["%.9f", "%d", "%d", "%d"], delimiter=',')
     return outpath

@@ -1,72 +1,144 @@
-
+/* ------------------------------
+   TAB SWITCHING
+--------------------------------*/
 document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    // deactivate all
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-    
-    // activate selected
-    tab.classList.add("active");
-    const target = tab.dataset.target;
-    document.getElementById(target).classList.add("active");
-  });
+    tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.target).classList.add("active");
+    });
 });
 
-
+/* ------------------------------
+   TOOLTIP LOGIC
+--------------------------------*/
 const tooltips = document.querySelectorAll('.tooltip');
 
 tooltips.forEach((tooltip) => {
-  const closeBtn = tooltip.querySelector('.close-btn');
+    const closeBtn = tooltip.querySelector('.close-btn');
 
-  // Show tooltip on icon click
-  tooltip.addEventListener('click', (e) => {
-    // Close other tooltips first
-    tooltips.forEach(t => t.classList.remove('active'));
-    tooltip.classList.add('active');
-    e.stopPropagation();
-  });
+    tooltip.addEventListener('click', (e) => {
+        tooltips.forEach(t => t.classList.remove('active'));
+        tooltip.classList.add('active');
+        e.stopPropagation();
+    });
 
-  // Close when clicking the '×'
-  closeBtn.addEventListener('click', (e) => {
-    tooltip.classList.remove('active');
-    e.stopPropagation();
-  });
+    closeBtn.addEventListener('click', (e) => {
+        tooltip.classList.remove('active');
+        e.stopPropagation();
+    });
 });
 
-// Close tooltip if clicking anywhere else
 document.addEventListener('click', () => {
-  tooltips.forEach(t => t.classList.remove('active'));
+    tooltips.forEach(t => t.classList.remove('active'));
 });
 
+
+/* ============================================================
+   UNIVERSAL API HANDLER FOR ALL FORMS
+============================================================ */
+async function handleFormUpload(form) {
+    const formData = new FormData(form);
+    const endpoint = form.getAttribute("action");
+
+    const statusBox = form.querySelector(".status-box");
+    if (statusBox) statusBox.innerHTML = "<p>Processing...</p>";
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            if (statusBox) statusBox.innerHTML = `<p style="color:red;">Server error</p>`;
+            return;
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+
+        // Auto-download
+        const a = document.createElement("a");
+        a.href = url;
+
+        // Infer filename
+        const cd = response.headers.get("Content-Disposition");
+        let filename = "events.txt";
+        if (cd) {
+            const match = cd.match(/filename="(.+)"/);
+            if (match) filename = match[1];
+        }
+        a.download = filename;
+        a.click();
+
+        if (statusBox) statusBox.innerHTML = `<p>✓ Completed. File downloaded.</p>`;
+
+    } catch (err) {
+        console.error(err);
+        if (statusBox) statusBox.innerHTML = `<p style="color:red;">Unexpected error</p>`;
+    }
+}
+
+/* ============================================================
+   ATTACH HANDLERS TO ALL STANDARD FORMS
+   (EXCEPT visualization, which is custom)
+============================================================ */
+document.querySelectorAll("form.api-upload").forEach(form => {
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        handleFormUpload(form);
+    });
+});
+
+
+/* ============================================================
+   VISUALIZATION (Generates GIF internally)
+============================================================ */
 const visualForm = document.getElementById("visual-form");
 const visualOutput = document.getElementById("visual-output");
-const downloadBtn = document.getElementById("download-btn"); // make sure this element exists in HTML
 
 visualForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  
-  visualOutput.innerHTML = "<p>Generating GIF...</p>"; // optional loading message
+    e.preventDefault();
 
-  const formData = new FormData(visualForm);
+    visualOutput.innerHTML = "<p>Generating GIF…</p>";
 
-  const response = await fetch("/visualize", {
-    method: "POST",
-    body: formData
-  });
+    const formData = new FormData(visualForm);
 
-  if (!response.ok) {
-    visualOutput.innerHTML = "<p style='color:red;'>Error generating visualization</p>";
-    return;
-  }
+    const response = await fetch("/api/visualize", {
+        method: "POST",
+        body: formData
+    });
 
-  const data = await response.json();
-  const gifUrl = data.gif_url;
+    if (!response.ok) {
+        visualOutput.innerHTML = "<p style='color:red;'>Error during visualization</p>";
+        return;
+    }
 
-  // Embed GIF in the page
-  visualOutput.innerHTML = `
+    const data = await response.json();
+
+    visualOutput.innerHTML = `
     <p>Generated GIF:</p>
-    <img src="${gifUrl}" alt="Visualization GIF" style="max-width:100%; border-radius:10px;">
+    <img src="${data.gif_url}" style="max-width:100%; border-radius:10px;">
     <br>
-    <a id="download-btn" href="${gifUrl}" download>Download GIF</a>
+    <a href="${data.gif_url}" download="visualization.gif">Download GIF</a>
   `;
 });
+
+
+/* ============================================================
+   JSON-BASED API CALL FOR LIVE PROCESSING (Already used)
+============================================================ */
+async function sendEventsToServer(events, width = 320, height = 240) {
+    const payload = { events, width, height, blur_faces: true };
+
+    const res = await fetch('/api/process_events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    return await res.json();
+}
