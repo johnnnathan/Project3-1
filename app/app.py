@@ -79,7 +79,7 @@ def api_visualize():
 
     events = np.loadtxt(filepath)
     timestamps = events[:, 0]
-
+    
     interval = float(request.form.get("interval", 50))
     chunk_size = make_frame_for_interval(interval, timestamps)
 

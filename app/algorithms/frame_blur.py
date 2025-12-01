@@ -10,5 +10,5 @@ def frame_blur(filepath, interval=50, sigma=1.5):
     blurred = blur_events(events, chunk_size, sigma=sigma)
 
     outpath = os.path.join("processed", "frame_blurred_" + os.path.basename(filepath))
-    np.savetxt(outpath, blurred, fmt=["%.9f", "%d", "%d", "%d"], delimiter=',')
+    np.savetxt(outpath, blurred, fmt=["%.9f", "%d", "%d", "%d"], delimiter=' ')
     return outpath

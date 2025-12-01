@@ -17,5 +17,5 @@ def event_shuffle(filepath, interval=50):
     shuffled = shuffle_events(events, chunk_size)
 
     outpath = os.path.join("processed", f"event_shuffled_{interval}ms_" + os.path.basename(filepath))
-    np.savetxt(outpath, shuffled, fmt=["%.9f", "%d", "%d", "%d"], delimiter=',')
+    np.savetxt(outpath, shuffled, fmt=["%.9f", "%d", "%d", "%d"], delimiter=' ')
     return outpath
