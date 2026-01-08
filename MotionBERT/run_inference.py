@@ -6,6 +6,8 @@ from EH36M.train_pose_model import EventPoseTransformer
 from motionbert_loader import load_motionbert_model
 from MotionBERT.labels.ntu60_labels import NTU60_LABELS
 from visualize_pose import animate_pose_sequence
+from collaboration_mapping import action_to_collab_score
+
 
 SEED = 0
 torch.manual_seed(SEED)
@@ -160,5 +162,9 @@ pred_label = NTU60_LABELS[pred_id] if pred_id < len(NTU60_LABELS) else "Unknown"
 
 print(f"Detected Action ID: {pred_id}")
 print(f"Action Label: {pred_label}")
+
+collab_score = action_to_collab_score(pred_label)
+print(f"Collaboration score (0–1): {collab_score:.2f}")
+
 
 animate_pose_sequence(pose_seq_vis, save_path="pose_sequence.gif")
