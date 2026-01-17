@@ -91,6 +91,14 @@ def api_visualize():
 
     return jsonify({"gif_url": f"/processed/{gif_name}"})
 
+@app.route("/api/v2e", methods=["POST"])
+def api_v2e():
+    return -1
+
+@app.route("/api/data-labeling", methods=["POST"])
+def api_labeling():
+    return -1
+
 
 @app.route("/processed/<filename>")
 def processed_file(filename):

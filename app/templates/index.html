@@ -25,6 +25,8 @@
                     <button class="tab-button" data-tab="frame-tab">Frame Shuffle</button>
                     <button class="tab-button" data-tab="blur-tab">Frame Blur</button>
                     <button class="tab-button" data-tab="visual-tab">Visualization</button>
+                    <button class="tab-button" data-tab="v2e-tab">V2E</button>
+                    <button class="tab-button" data-tab="labeling-tab">Data Labeling</button>
                 </div>
 
                 <!-- Event Shuffle -->
@@ -93,6 +95,35 @@
                             <a id="download-btn" href="#" download>Download GIF</a>
                             <img id="visual-gif" src="" alt="">
                         </div>
+                    </div>
+                </div>
+                <!-- V2E -->
+                <div class="tab-content" id="v2e-tab">
+                    <div class="card">
+                        <h3>Video-2-Event</h3>
+                        <p>Convers the video data into event data.</p>
+                        <form action="/api/v2e" method="POST" enctype="multipart/form-data">
+                            <label>Select mp4 file:</label>
+                            <input class="make-wide" type="file" name="file" required>
+
+                            <button type="submit">Generate Events</button>
+                        </form>
+
+                    </div>
+                </div>
+
+                <!-- Data Labeling -->
+                <div class="tab-content" id="labeling-tab">
+                    <div class="card">
+                        <h3>Data Labeling</h3>
+                        <p>Labels event data with pose classification model.</p>
+                        <form action="/api/data-labeling" method="POST" enctype="multipart/form-data">
+                            <label>Select event file:</label>
+                            <input class="make-wide" type="file" name="file" required>
+
+                            <button type="submit">Generate Data Labeling</button>
+                        </form>
+
                     </div>
                 </div>
 
