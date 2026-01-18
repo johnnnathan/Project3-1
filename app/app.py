@@ -93,11 +93,13 @@ def api_visualize():
 
 @app.route("/api/v2e", methods=["POST"])
 def api_v2e():
-    return -1
+    print("Run v2e function")
+    return "This feature has not been implemented yet."
 
 @app.route("/api/data-labeling", methods=["POST"])
 def api_labeling():
-    return -1
+    print("Run labeling function")
+    return "This feature has not been implemented yet."
 
 
 @app.route("/processed/<filename>")
