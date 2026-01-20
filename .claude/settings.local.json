@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(tree:*)",
+      "Bash(gh issue list:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(dir \"C:\\\\Users\\\\Administrator\\\\.claude\\\\plans\")",
+      "Bash(where:*)",
+      "Bash(pandoc:*)",
+      "Bash(pip show:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(.venv/Scripts/python.exe -c \"import torch; print\\(''torch:'', torch.__version__\\)\")"
+    ]
+  }
+}
